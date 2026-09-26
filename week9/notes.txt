@@ -1,0 +1,271 @@
+Version Control and Git Setup
+# Replace with your name and email
+git config --global user.name "Brian Otieno"
+git config --global user.email "brian@example.com"
+
+# Set VS Code as the default editor
+git config --global core.editor "code --wait"
+
+# Verify your settings
+git config --global --list
+user.name=Brian Otieno
+user.email=brian@example.com
+core.editor=code --wait
+
+
+
+
+# Create a new project folder
+mkdir smp-tracker
+cd smp-tracker
+
+# Initialize Git
+git init
+Initialized empty Git repository in /home/brian/smp-tracker/.git/
+
+# Check the status (nothing tracked yet)
+git status
+On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+
+
+
+
+
+# Create the .gitignore file
+touch .gitignore
+
+# Open it in VS Code and add patterns, then save
+code .gitignore
+
+# Create a file that should be ignored
+touch .env
+
+# Check status - .env should not appear
+git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .gitignore
+
+nothing added to commit but untracked files present
+
+# .env is not listed because .gitignore hides it
+
+
+
+Staging, Committing, and History
+# Stage a single file
+git add tracker.py
+
+# Stage multiple specific files
+git add tracker.py config.py README.md
+
+# Stage all changes in the current directory
+git add .
+
+# Check what is staged
+git status
+On branch main
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   .gitignore
+        new file:   README.md
+        new file:   tracker.py
+
+
+
+
+# Commit with an inline message
+git commit -m "Add SMP tracker script with daily check-in logic"
+[main (root-commit) a1b2c3d] Add SMP tracker script with daily check-in logic
+ 3 files changed, 84 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 README.md
+ create mode 100644 tracker.py
+
+# Stage and commit all tracked files in one step
+git commit -am "Fix step count calculation off-by-one error"
+# Note: -a only stages already-tracked files, not new files
+
+
+
+# Full log
+git log
+
+
+# Compact one-line format
+git log --oneline
+
+# Show only last 5 commits
+git log --oneline -5
+
+# Show what changed in each commit
+git log --stat
+
+
+# Show unstaged changes (what you changed but have not yet added)
+git diff
+
+
+# Show staged changes (what is ready to commit)
+git diff --staged
+
+
+# Show all changes in a specific commit
+git show a1b2c3d
+
+# Compare two commits
+git diff a1b2c3d d4e5f6a
+
+
+# 1. Check current state
+git status
+
+
+# 2. Stage both files
+git add tracker.py api_client.py
+
+
+# 3. Verify what is staged
+git status
+
+
+# 4. Commit
+git commit -m "Add API client module and fix tracker null check"
+
+
+# 5. Confirm clean state
+git status
+
+
+# 6. View history
+git log --oneline
+
+
+
+
+
+
+Branches and Merging
+Creating and Switching Branches
+# See all branches (current branch marked with *)
+git branch
+* main
+
+# Create a new branch
+git branch feature/api-dashboard
+
+# Switch to it
+git switch feature/api-dashboard
+Switched to branch 'feature/api-dashboard'
+
+# Create AND switch in one command (preferred)
+git switch -c feature/coaching-module
+Switched to a new branch 'feature/coaching-module'
+
+# Confirm current branch
+git branch
+  feature/api-dashboard
+* feature/coaching-module
+  main
+
+# Switch back to main
+git switch main
+
+
+
+Making Commits on a Branch
+# Start on main, create feature branch
+git switch -c feature/coaching-module
+
+# Create a new file on this branch
+touch coaching.py
+echo "def get_coaching(sleep, water, steps): pass" > coaching.py
+
+# Stage and commit on the feature branch
+git add coaching.py
+git commit -m "Add coaching module skeleton"
+
+# Switch back to main
+git switch main
+
+# coaching.py does not exist on main
+ls
+README.md  tracker.py  .gitignore
+
+# Switch back to feature branch - coaching.py reappears
+git switch feature/coaching-module
+ls
+README.md  coaching.py  tracker.py  .gitignore
+
+
+
+Merging Branches
+# Step 1: Switch to main
+git switch main
+
+
+# Step 2: Merge the feature branch
+git merge feature/coaching-module
+
+# coaching.py is now on main
+ls
+
+# Step 3: Delete the feature branch (optional, keeps things clean)
+git branch -d feature/coaching-module
+
+
+# View merged history
+git log --oneline
+
+
+
+
+Merge Conflicts
+# Git shows the conflict
+git merge feature/flexible-goal
+
+
+# Open the file, edit it, remove conflict markers, save
+code tracker.py
+
+# After resolving: stage the file
+git add tracker.py
+
+# Complete the merge with a commit
+git commit -m "Merge feature/flexible-goal: add configurable goal parameter"
+
+
+
+GitHub and Remote Repositories
+Setting Up GitHub Authentication
+
+# Step 1: Generate an SSH key pair
+ssh-keygen -t ed25519 -C "brian@example.com"
+# Press Enter to accept default file location
+# Press Enter twice for no passphrase (or set one for extra security)
+
+# Step 2: Copy the public key to clipboard
+# Mac:
+cat ~/.ssh/id_ed25519.pub | pbcopy
+# Windows (Git Bash):
+cat ~/.ssh/id_ed25519.pub | clip
+# Linux:
+cat ~/.ssh/id_ed25519.pub
+# (then manually copy the output)
+
+# Step 3: Go to github.com
+# Settings > SSH and GPG keys > New SSH key
+# Paste your public key and save
+
+# Step 4: Test the connection
+ssh -T git@github.com
+Hi brianotieno! You've successfully authenticated, but GitHub does not provide shell access.

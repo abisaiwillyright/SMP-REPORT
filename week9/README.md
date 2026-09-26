@@ -1,0 +1,1 @@
+The lesson is moving on smothly
