@@ -1,0 +1,1 @@
+x, y, z = 10, 20, 30        # Three variables in one line
