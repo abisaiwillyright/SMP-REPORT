@@ -83,5 +83,3 @@ print("\nPrediction for new days:")
 for inputs, pred in zip(new_days, preds):
     print(f"  Sleep={inputs[0]}h, Water={int(inputs[1])}g => {labels[pred]}")
 
-
-#OPENAI_API_KEY=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
